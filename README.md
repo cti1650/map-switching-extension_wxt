@@ -1,6 +1,8 @@
-# WXT + React + Tailwindcss
+# Map Switching Extension
 
-This template should help get you started developing with React in WXT.
+Googleストリートビューで見ている場所を他のマップで開いて表示したい！という個人的な要望をChrome拡張機能化しました！
+
+https://chromewebstore.google.com/detail/map-switching-extension/dkpkkcfenknkfjjpbaafahfakkdlnjcl?authuser=0&hl=ja
 
 ## Command
 
