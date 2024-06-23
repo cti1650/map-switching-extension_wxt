@@ -1,5 +1,9 @@
 import { expect, describe, test } from 'vitest';
-import { convertMapPosition, getMapPosition, getMapLink } from './util';
+import {
+  convertMapPosition,
+  getMapPosition,
+  getMapLink,
+} from './util';
 
 describe('util', () => {
   test('convertMapPosition', () => {
