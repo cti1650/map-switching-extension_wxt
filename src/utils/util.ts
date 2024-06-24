@@ -25,11 +25,10 @@ export const getMapPosition = (url: string): MapPosition | null => {
   if (~url.indexOf('https://www.google.') && ~url.indexOf('map')) {
     const word = url.replace('https://www.google.', '');
     let re = /@(\d+\.\d+),(\d+\.\d+),(\d+[z,m,a])/i;
-    let re2 = /!3d(\d+\.\d+)!4d(\d+\.\d+)$/i;
+    let re2 = /!3d(\d+\.\d+)!4d(\d+\.\d+)/i;
     const ex = word.match(re);
     const ex2 = word.match(re2);
     // console.log(ex);
-    // console.log(ex2);
     if (ex2) {
       return {
         url: url,
@@ -71,6 +70,35 @@ export const getMapPosition = (url: string): MapPosition | null => {
         long: Number(ex[2]),
       };
     }
+  } else if (
+    ~url.indexOf('https://disaportal.gsi.go.jp/hazardmap/maps/index.html?ll=')
+  ) {
+    const word = url.replace(
+      'https://disaportal.gsi.go.jp/hazardmap/maps/index.html?ll=',
+      ''
+    );
+    let re = /(\d+\.\d+),(\d+\.\d+)/i;
+    const ex = word.match(re);
+    if (ex) {
+      return {
+        url: url,
+        gcs: 'wgs84',
+        lat: Number(ex[1]),
+        long: Number(ex[2]),
+      };
+    }
+  } else if (~url.indexOf('https://www.river.go.jp/kawabou/pc/ov?')) {
+    const word = url.replace('https://www.river.go.jp/kawabou/pc/ov?', '');
+    let re = /clat=(\d+\.\d+)&clon=(\d+\.\d+)/i;
+    const ex = word.match(re);
+    if (ex) {
+      return {
+        url: url,
+        gcs: 'wgs84',
+        lat: Number(ex[1]),
+        long: Number(ex[2]),
+      };
+    }
   }
   return null;
 };
@@ -80,6 +108,8 @@ export type MapLink = {
   ymap: string;
   ycarnavi: string;
   gsimap: string;
+  disaportal: string;
+  kawabou: string;
 };
 
 export const getMapLink = (data: MapPosition): MapLink | null => {
@@ -88,5 +118,7 @@ export const getMapLink = (data: MapPosition): MapLink | null => {
   const ymap = `https://map.yahoo.co.jp/place/?lat=${data.lat}&lon=${data.long}&zoom=18`;
   const ycarnavi = `yjcarnavi://navi/select?lat=${data.lat}&lon=${data.long}`;
   const gsimap = `https://maps.gsi.go.jp/#18/${data.lat}/${data.long}/`;
-  return { gmap, ymap, ycarnavi, gsimap };
+  const disaportal = `https://disaportal.gsi.go.jp/hazardmap/maps/index.html?ll=${data.lat},${data.long}&z=18`;
+  const kawabou = `https://www.river.go.jp/kawabou/pc/ov?zm=17&clat=${data.lat}&clon=${data.long}`;
+  return { gmap, ymap, ycarnavi, gsimap, disaportal, kawabou };
 };

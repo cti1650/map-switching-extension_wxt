@@ -1,5 +1,6 @@
 import {
   RecordData,
+  convertCSVToData,
   convertGPXToGeoJson,
   convertGeoJsonToData,
   convertKMLToGeoJson,
@@ -7,13 +8,16 @@ import {
 import React, { FC, useState } from 'react';
 
 type Props = {
-  onDataLoaded: (data: RecordData) => void;
+  onDataLoaded: (data: RecordData[]) => void;
 };
 
 const ImportComponent: FC<Props> = ({ onDataLoaded }) => {
   const [file, setFile] = useState<File | null>(null);
 
-  const handleFileChange = e => {
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files || !e.target.files.length) {
+      return;
+    }
     setFile(e.target.files[0]);
   };
 
@@ -22,17 +26,17 @@ const ImportComponent: FC<Props> = ({ onDataLoaded }) => {
       return;
     }
     const reader = new FileReader();
-    reader.onload = e => {
+    reader.onload = async e => {
       if (!e.target || !file) {
         return;
       }
-      const data = e.target.result;
+      const data = e.target.result as string;
       const fileType = file.name.split('.').pop();
 
-      let parsedData;
+      let parsedData: RecordData[] = [];
       switch (fileType) {
         case 'csv':
-          parsedData = parseCSV(data); // CSVデータのパース関数を定義
+          parsedData = await convertCSVToData(data);
           break;
         case 'kml':
           parsedData = convertGeoJsonToData(convertKMLToGeoJson(data));

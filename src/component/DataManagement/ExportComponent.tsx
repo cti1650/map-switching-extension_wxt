@@ -2,13 +2,14 @@ import React, { FC, useEffect, useState } from 'react';
 import { CSVLink } from 'react-csv';
 import { convertDataToGeoJSON, convertGeoJsonToKML } from '@/utils/convert';
 import { RecordData } from '@/utils/convert';
+import { GeoJSON as GeoJSONType } from 'geojson';
 
 type Props = {
   data: RecordData[];
-}
+};
 
 const ExportComponent: FC<Props> = ({ data }) => {
-  const [geoData, setGeoData] = useState(null);
+  const [geoData, setGeoData] = useState<GeoJSONType | null>(null);
 
   useEffect(() => {
     if (data && data.length) {
@@ -23,6 +24,7 @@ const ExportComponent: FC<Props> = ({ data }) => {
 
   const exportToKML = () => {
     const kml = convertGeoJsonToKML(geoData);
+    if (!kml) return;
     const blob = new Blob([kml], {
       type: 'application/vnd.google-earth.kml+xml',
     });
@@ -37,6 +39,7 @@ const ExportComponent: FC<Props> = ({ data }) => {
 
   const exportToGeoJSON = () => {
     const geojson = JSON.stringify(geoData);
+    if (!geojson) return;
     const blob = new Blob([geojson], { type: 'application/geo+json' });
     const url = URL.createObjectURL(blob);
     const link = document.createElement('a');

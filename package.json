@@ -20,6 +20,7 @@
     "@mapbox/togeojson": "^0.16.2",
     "@tmcw/togeojson": "^5.8.1",
     "classcat": "^5.0.5",
+    "csvtojson": "^2.0.10",
     "geojson": "^0.5.0",
     "geojson-to-kml": "^0.0.1",
     "geojson2kml": "^0.1.1",

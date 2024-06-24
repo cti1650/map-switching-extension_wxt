@@ -2,6 +2,7 @@ import React, { FC, useEffect, useState } from 'react';
 import ImportComponent from './ImportComponent';
 import ExportComponent from './ExportComponent';
 import EditableTable from './EditableTable';
+import { RecordData } from '@/utils';
 
 const testData = [
   {
@@ -28,23 +29,23 @@ const testData = [
 ];
 
 const DataManagement: FC = () => {
-  const [data, setData] = useState(testData);
+  const [data, setData] = useState<RecordData[]>(testData);
 
-  const handleDataLoaded = loadedData => {
+  const handleDataLoaded = (loadedData: RecordData[]) => {
     setData(loadedData);
   };
 
-  const handleUpdateData = (index, updatedRow) => {
+  const handleUpdateData = (index: number, updatedRow: RecordData) => {
     setData(prevData =>
       prevData.map((row, i) => (i === index ? updatedRow : row))
     );
   };
 
-  const handleDeleteRow = index => {
+  const handleDeleteRow = (index: number) => {
     setData(prevData => prevData.filter((_, i) => i !== index));
   };
 
-  const handleAddRow = newRow => {
+  const handleAddRow = (newRow: RecordData) => {
     setData(prevData => [...prevData, newRow]);
   };
 
@@ -57,7 +58,7 @@ const DataManagement: FC = () => {
           { Header: 'Location', accessor: 'location' },
         ]} // カラムを設定
         data={data}
-        updateData={handleUpdateData}
+        // updateData={handleUpdateData}
         deleteRow={handleDeleteRow}
         addRow={handleAddRow}
       />

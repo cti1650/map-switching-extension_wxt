@@ -2,20 +2,35 @@ import * as GeoJSON from 'geojson';
 import tokml from 'geojson-to-kml';
 import * as toGeoJSON from '@tmcw/togeojson';
 import { DOMParser } from 'xmldom';
-import { buildGPX, GarminBuilder, BaseBuilder } from 'gpx-builder';
-import { GeoJsonObject, GeoJSON as GeoJSONType } from 'geojson';
-import { parse } from 'gpx-parser-builder';
+import { buildGPX, GarminBuilder } from 'gpx-builder';
+import { GeoJSON as GeoJSONType } from 'geojson';
+import csv from 'csvtojson';
 
 export type RecordData = Record<string, string | number | null>;
 
 export const convertDataToGeoJSON = (data: any): GeoJSONType | null => {
   if (!data) return null;
   const geojsonData = GeoJSON.parse(data, { Point: ['lat', 'lng'] });
-  console.log('geojsonData', JSON.stringify(geojsonData));
   return geojsonData;
 };
 
-export const convertGeoJsonToData = (data: GeoJSONType | null): any[] => {
+export const convertCSVToData = async (
+  data: string | null
+): Promise<RecordData[]> => {
+  if (!data) return [];
+  const json = await csv().fromString(data);
+  return json.map((item: any) => {
+    return {
+      ...item,
+      lat: Number(item.lat),
+      lng: Number(item.lng),
+    };
+  });
+};
+
+export const convertGeoJsonToData = (
+  data: GeoJSONType | null
+): RecordData[] => {
   if ((data as any).features) {
     return (data as any).features.map((feature: any) => {
       const [lng, lat] = feature.geometry.coordinates;

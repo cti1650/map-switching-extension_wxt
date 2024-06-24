@@ -4,7 +4,7 @@ import { useTable } from 'react-table';
 type Props = {
   columns: any[];
   data: any[];
-  updateData: (rowIndex: number, columnId: string, value: string) => void;
+  updateData?: (rowIndex: number, columnId: number, value: string) => void;
   deleteRow: (rowIndex: number) => void;
   addRow: (newRow: any) => void;
 };
@@ -16,9 +16,12 @@ const EditableTable: FC<Props> = ({
   deleteRow,
   addRow,
 }) => {
-  const [newRow, setNewRow] = useState({});
+  const [newRow, setNewRow] = useState<Record<string, string | number>>({});
 
-  const handleInputChange = (e, columnId) => {
+  const handleInputChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+    columnId: string
+  ) => {
     const value = e.target.value;
     setNewRow(prev => ({
       ...prev,
