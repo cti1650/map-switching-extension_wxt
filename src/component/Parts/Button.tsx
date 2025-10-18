@@ -8,7 +8,7 @@ type ButtonProps = {
 };
 
 export const Button: FC<ButtonProps> = props => {
-  const { src, title, children } = props;
+  const { src = '', title = 'button', children } = props;
   const handleClick = useCallback(() => {
     window.open(src);
   }, [src]);
@@ -24,11 +24,6 @@ export const Button: FC<ButtonProps> = props => {
   );
 };
 
-Button.defaultProps = {
-  src: '',
-  title: 'button',
-};
-
 type ButtonPanelProps = {
   src: string;
   title: string;
@@ -36,7 +31,7 @@ type ButtonPanelProps = {
 };
 
 export const ButtonPanel: FC<ButtonPanelProps> = props => {
-  const { src, title, children } = props;
+  const { src = '', title = 'button', children } = props;
   const handleClick = useCallback(() => {
     window.open(src);
   }, [src]);
@@ -66,9 +61,4 @@ export const ButtonPanel: FC<ButtonPanelProps> = props => {
       </div>
     </div>
   );
-};
-
-ButtonPanel.defaultProps = {
-  src: '',
-  title: 'button',
 };

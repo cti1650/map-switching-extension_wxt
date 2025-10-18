@@ -112,7 +112,7 @@ export type MapLink = {
   kawabou: string;
 };
 
-export const getMapLink = (data: MapPosition): MapLink | null => {
+export const getMapLink = (data: MapPosition | null): MapLink | null => {
   if (!data) return null;
   const gmap = `https://www.google.com/maps/place/${data.lat},${data.long}`;
   const ymap = `https://map.yahoo.co.jp/place/?lat=${data.lat}&lon=${data.long}&zoom=18`;
