@@ -8,7 +8,7 @@ export default defineConfig({
   manifest: {
     name: 'Map Switching Extension',
     description: 'Map Switching Extension',
-    version: '1.0.4',
+    version: '1.1.0',
     permissions: ['tabs'],
   },
   vite: () => ({
