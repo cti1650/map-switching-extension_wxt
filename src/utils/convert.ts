@@ -1,10 +1,10 @@
 import * as GeoJSON from 'geojson';
 import tokml from 'geojson-to-kml';
 import * as toGeoJSON from '@tmcw/togeojson';
-import { DOMParser } from 'xmldom';
 import { buildGPX, GarminBuilder } from 'gpx-builder';
 import { GeoJSON as GeoJSONType } from 'geojson';
 import csv from 'csvtojson';
+import { DOMParser } from '@xmldom/xmldom';
 
 export type RecordData = Record<string, string | number | null>;
 
