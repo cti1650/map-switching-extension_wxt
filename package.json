@@ -2,9 +2,10 @@
   "name": "map-switching-extension_wxt",
   "description": "manifest.json description",
   "private": true,
-  "version": "1.1.0",
+  "version": "1.0.4",
   "type": "module",
   "scripts": {
+    "prepare": "simple-git-hooks",
     "dev": "wxt",
     "dev:firefox": "wxt -b firefox",
     "build": "wxt build",
@@ -13,7 +14,10 @@
     "zip:firefox": "wxt zip -b firefox",
     "compile": "tsc --noEmit",
     "postinstall": "wxt prepare",
-    "test": "vitest"
+    "test": "vitest",
+    "lint": "eslint . --ext .ts,.tsx,.js",
+    "format": "prettier --check .",
+    "format:fix": "prettier --write ."
   },
   "dependencies": {
     "@fulcrumapp/tokml": "^0.7.1",
@@ -47,13 +51,28 @@
     "@types/react-dom": "^18.3.7",
     "@types/react-table": "^7.7.20",
     "@types/xmldom": "^0.1.34",
+    "@typescript-eslint/eslint-plugin": "^8.46.2",
+    "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-react": "^4.7.0",
     "autoprefixer": "^10.4.21",
+    "eslint": "^8.57.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.4",
     "jsdom": "^27.0.1",
+    "lint-staged": "^16.2.5",
     "postcss": "^8.5.6",
+    "prettier": "^3.6.2",
+    "simple-git-hooks": "^2.13.1",
     "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4",
     "wxt": "^0.20.11"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx lint-staged"
+  },
+  "lint-staged": {
+    "*.{mjs,js,jsx,ts,tsx,css,json}": "prettier --write",
+    "*.{js,jsx,ts,tsx}": "eslint --fix"
   }
 }
