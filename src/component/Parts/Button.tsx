@@ -1,5 +1,5 @@
-import { FC, useCallback } from 'react';
-import QRCode from 'react-qr-code';
+import { FC, useCallback } from "react";
+import QRCode from "react-qr-code";
 
 type ButtonProps = {
   src: string;
@@ -7,8 +7,8 @@ type ButtonProps = {
   children?: React.ReactNode;
 };
 
-export const Button: FC<ButtonProps> = props => {
-  const { src = '', title = 'button', children } = props;
+export const Button: FC<ButtonProps> = (props) => {
+  const { src = "", title = "button", children } = props;
   const handleClick = useCallback(() => {
     window.open(src);
   }, [src]);
@@ -30,8 +30,8 @@ type ButtonPanelProps = {
   children?: React.ReactNode;
 };
 
-export const ButtonPanel: FC<ButtonPanelProps> = props => {
-  const { src = '', title = 'button', children } = props;
+export const ButtonPanel: FC<ButtonPanelProps> = (props) => {
+  const { src = "", title = "button", children } = props;
   const handleClick = useCallback(() => {
     window.open(src);
   }, [src]);
@@ -42,7 +42,7 @@ export const ButtonPanel: FC<ButtonPanelProps> = props => {
         <div className="h-auto w-full max-w-128 mx-auto my-0 p-2">
           <QRCode
             size={256}
-            style={{ height: 'auto', maxWidth: '100%', width: '100%' }}
+            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             className="w-full h-auto max-w-full"
             value={src}
             viewBox={`0 0 256 256`}

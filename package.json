@@ -16,6 +16,7 @@
     "postinstall": "wxt prepare",
     "test": "vitest",
     "lint": "eslint . --ext .ts,.tsx,.js",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },

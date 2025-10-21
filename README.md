@@ -31,5 +31,6 @@ yarn zip
 ```
 
 ## 参考サイト
-- [Next-gen Web Extension Framework – WXT](https://wxt.dev/)  
-- [Install Tailwind CSS with Vite - Tailwind CSS](https://tailwindcss.com/docs/guides/vite)  
+
+- [Next-gen Web Extension Framework – WXT](https://wxt.dev/)
+- [Install Tailwind CSS with Vite - Tailwind CSS](https://tailwindcss.com/docs/guides/vite)
