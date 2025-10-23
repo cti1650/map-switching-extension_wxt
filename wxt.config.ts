@@ -11,6 +11,7 @@ export default defineConfig({
     version: "1.0.4",
     permissions: ["tabs"],
   },
+  modules: ["@wxt-dev/auto-icons"],
   vite: () => ({
     plugins: [react()],
     resolve: {
