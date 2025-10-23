@@ -1,5 +1,5 @@
-import { MapLink, MapPosition, getMapLink, getMapPosition } from '@/utils/util';
-import { useEffect, useState } from 'react';
+import { MapLink, MapPosition, getMapLink, getMapPosition } from "@/utils/util";
+import { useEffect, useState } from "react";
 
 export const useMapGeoData = (url: string | null) => {
   const [dataJson, setDataJson] = useState<MapPosition | null>(null);

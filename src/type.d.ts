@@ -1,2 +1,2 @@
-declare module '@fulcrumapp/tokml';
-declare module 'geojson-to-kml';
+declare module "@fulcrumapp/tokml";
+declare module "geojson-to-kml";

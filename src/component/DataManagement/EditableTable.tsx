@@ -1,5 +1,5 @@
-import React, { FC, useState } from 'react';
-import { useTable } from 'react-table';
+import React, { FC, useState } from "react";
+import { useTable } from "react-table";
 
 type Props = {
   columns: any[];
@@ -9,21 +9,12 @@ type Props = {
   addRow: (newRow: any) => void;
 };
 
-const EditableTable: FC<Props> = ({
-  columns,
-  data,
-  updateData,
-  deleteRow,
-  addRow,
-}) => {
+const EditableTable: FC<Props> = ({ columns, data, deleteRow, addRow }) => {
   const [newRow, setNewRow] = useState<Record<string, string | number>>({});
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    columnId: string
-  ) => {
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>, columnId: string) => {
     const value = e.target.value;
-    setNewRow(prev => ({
+    setNewRow((prev) => ({
       ...prev,
       [columnId]: value,
     }));
@@ -34,34 +25,33 @@ const EditableTable: FC<Props> = ({
     setNewRow({});
   };
 
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable({
-      columns,
-      data,
-    });
+  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } = useTable({
+    columns,
+    data,
+  });
 
   return (
     <div className="p-4">
       <table {...getTableProps()} className="table-auto w-full">
         <thead>
-          {headerGroups.map(headerGroup => (
+          {headerGroups.map((headerGroup) => (
             <tr {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
+              {headerGroup.headers.map((column) => (
                 <th {...column.getHeaderProps()} className="border px-4 py-2">
-                  {column.render('Header')}
+                  {column.render("Header")}
                 </th>
               ))}
             </tr>
           ))}
         </thead>
         <tbody {...getTableBodyProps()}>
-          {rows.map(row => {
+          {rows.map((row) => {
             prepareRow(row);
             return (
               <tr {...row.getRowProps()}>
-                {row.cells.map(cell => (
+                {row.cells.map((cell) => (
                   <td {...cell.getCellProps()} className="border px-4 py-2">
-                    {cell.render('Cell')}
+                    {cell.render("Cell")}
                   </td>
                 ))}
                 <td>
@@ -76,20 +66,17 @@ const EditableTable: FC<Props> = ({
             );
           })}
           <tr>
-            {columns.map(column => (
+            {columns.map((column) => (
               <td key={column.accessor} className="border px-4 py-2">
                 <input
-                  value={newRow[column.accessor] || ''}
-                  onChange={e => handleInputChange(e, column.accessor)}
+                  value={newRow[column.accessor] || ""}
+                  onChange={(e) => handleInputChange(e, column.accessor)}
                   className="p-2 border rounded"
                 />
               </td>
             ))}
             <td>
-              <button
-                onClick={handleAddRow}
-                className="bg-green-500 text-white p-2 rounded"
-              >
+              <button onClick={handleAddRow} className="bg-green-500 text-white p-2 rounded">
                 追加
               </button>
             </td>

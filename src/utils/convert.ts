@@ -1,22 +1,20 @@
-import * as GeoJSON from 'geojson';
-import tokml from 'geojson-to-kml';
-import * as toGeoJSON from '@tmcw/togeojson';
-import { buildGPX, GarminBuilder } from 'gpx-builder';
-import { GeoJSON as GeoJSONType } from 'geojson';
-import csv from 'csvtojson';
-import { DOMParser } from '@xmldom/xmldom';
+import * as GeoJSON from "geojson";
+import tokml from "geojson-to-kml";
+import * as toGeoJSON from "@tmcw/togeojson";
+import { buildGPX, GarminBuilder } from "gpx-builder";
+import { GeoJSON as GeoJSONType } from "geojson";
+import csv from "csvtojson";
+import { DOMParser } from "@xmldom/xmldom";
 
 export type RecordData = Record<string, string | number | null>;
 
 export const convertDataToGeoJSON = (data: any): GeoJSONType | null => {
   if (!data) return null;
-  const geojsonData = GeoJSON.parse(data, { Point: ['lat', 'lng'] });
+  const geojsonData = GeoJSON.parse(data, { Point: ["lat", "lng"] });
   return geojsonData;
 };
 
-export const convertCSVToData = async (
-  data: string | null
-): Promise<RecordData[]> => {
+export const convertCSVToData = async (data: string | null): Promise<RecordData[]> => {
   if (!data) return [];
   const json = await csv().fromString(data);
   return json.map((item: any) => {
@@ -28,9 +26,7 @@ export const convertCSVToData = async (
   });
 };
 
-export const convertGeoJsonToData = (
-  data: GeoJSONType | null
-): RecordData[] => {
+export const convertGeoJsonToData = (data: GeoJSONType | null): RecordData[] => {
   if ((data as any).features) {
     return (data as any).features.map((feature: any) => {
       const [lng, lat] = feature.geometry.coordinates;
@@ -44,17 +40,13 @@ export const convertGeoJsonToData = (
   return [];
 };
 
-export const convertGeoJsonToKML = (
-  data: GeoJSONType | null
-): string | null => {
+export const convertGeoJsonToKML = (data: GeoJSONType | null): string | null => {
   if (!data) return null;
   const kml = tokml(data);
   return kml;
 };
 
-export const convertGeoJsonToGPX = (
-  data: GeoJSONType | null
-): string | null => {
+export const convertGeoJsonToGPX = (data: GeoJSONType | null): string | null => {
   if (!data) return null;
   const { Point, Track, Segment } = GarminBuilder.MODELS;
   const gpxData = new GarminBuilder();
@@ -76,20 +68,16 @@ export const convertGeoJsonToGPX = (
   return gpx;
 };
 
-export const convertKMLToGeoJson = (
-  data: string | null
-): GeoJSONType | null => {
+export const convertKMLToGeoJson = (data: string | null): GeoJSONType | null => {
   if (!data) return null;
-  const kmlDom = new DOMParser().parseFromString(data, 'text/xml');
+  const kmlDom = new DOMParser().parseFromString(data, "text/xml");
   const geojsonData = toGeoJSON.kml(kmlDom);
   return geojsonData as GeoJSONType;
 };
 
-export const convertGPXToGeoJson = (
-  data: string | null
-): GeoJSONType | null => {
+export const convertGPXToGeoJson = (data: string | null): GeoJSONType | null => {
   if (!data) return null;
-  const gpxDom = new DOMParser().parseFromString(data, 'text/xml');
+  const gpxDom = new DOMParser().parseFromString(data, "text/xml");
   const geojsonData = toGeoJSON.gpx(gpxDom);
   return geojsonData;
 };

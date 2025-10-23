@@ -16,6 +16,7 @@
     "postinstall": "wxt prepare",
     "test": "vitest",
     "lint": "eslint . --ext .ts,.tsx,.js",
+    "lint:fix": "eslint . --ext .ts,.tsx,.js --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write ."
   },
@@ -54,6 +55,7 @@
     "@typescript-eslint/eslint-plugin": "^8.46.2",
     "@typescript-eslint/parser": "^8.46.2",
     "@vitejs/plugin-react": "^4.7.0",
+    "@wxt-dev/auto-icons": "^1.1.0",
     "autoprefixer": "^10.4.21",
     "eslint": "^8.57.1",
     "eslint-config-prettier": "^10.1.8",

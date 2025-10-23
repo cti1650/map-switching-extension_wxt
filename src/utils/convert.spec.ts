@@ -1,4 +1,4 @@
-import { expect, describe, test } from 'vitest';
+import { expect, describe, test } from "vitest";
 import {
   convertDataToGeoJSON,
   convertGeoJsonToKML,
@@ -7,26 +7,26 @@ import {
   convertKMLToGeoJson,
   convertGPXToGeoJson,
   convertCSVToData,
-} from './convert';
-import { GeoJsonObject, GeoJSON } from 'geojson';
+} from "./convert";
+import { GeoJSON } from "geojson";
 
 const testData = [
   {
     lat: 35.6809591,
     lng: 139.7673068,
-    name: 'Tokyo',
+    name: "Tokyo",
   },
 ];
 
-const testCSV = 'lat,lng,name\n35.6809591,139.7673068,Tokyo\n';
+const testCSV = "lat,lng,name\n35.6809591,139.7673068,Tokyo\n";
 
 const testGeoJson: GeoJSON = {
-  type: 'FeatureCollection',
+  type: "FeatureCollection",
   features: [
     {
-      type: 'Feature',
-      geometry: { type: 'Point', coordinates: [139.7673068, 35.6809591] },
-      properties: { name: 'Tokyo' },
+      type: "Feature",
+      geometry: { type: "Point", coordinates: [139.7673068, 35.6809591] },
+      properties: { name: "Tokyo" },
     },
   ],
 };
@@ -45,33 +45,33 @@ const testGPX = `<?xml version="1.0" encoding="UTF-8"?>
   </trk>
 </gpx>`;
 
-describe('convert', () => {
-  test('convertDataToGeoJSON', () => {
+describe("convert", () => {
+  test("convertDataToGeoJSON", () => {
     expect(convertDataToGeoJSON(testData)).toMatchObject(testGeoJson);
   });
 
-  test('convertCSVToData', async () => {
+  test("convertCSVToData", async () => {
     expect(await convertCSVToData(testCSV)).toMatchObject(testData);
   });
 
-  test('convertGeoJsonToData', () => {
+  test("convertGeoJsonToData", () => {
     expect(convertGeoJsonToData(testGeoJson)).toMatchObject(testData);
   });
 
-  test('convertGeoJsonToKML', () => {
+  test("convertGeoJsonToKML", () => {
     expect(convertGeoJsonToKML(testGeoJson)).toBe(testKML);
   });
 
-  test('convertGeoJsonToGPX', () => {
+  test("convertGeoJsonToGPX", () => {
     expect(convertGeoJsonToGPX(testGeoJson)).toBe(testGPX);
   });
 
-  test('convertKMLToGeoJson', () => {
+  test("convertKMLToGeoJson", () => {
     expect(convertKMLToGeoJson(testKML)).toMatchObject(testGeoJson);
   });
 
   // TODO: エラーが発生しているので直す予定
-  test('convertGPXToGeoJson', () => {
+  test("convertGPXToGeoJson", () => {
     const gpx = convertGeoJsonToGPX(testGeoJson);
     expect(convertGPXToGeoJson(gpx)).toMatchObject({
       ...testGeoJson,

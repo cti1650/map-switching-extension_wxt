@@ -4,8 +4,8 @@ import {
   convertGPXToGeoJson,
   convertGeoJsonToData,
   convertKMLToGeoJson,
-} from '@/utils';
-import React, { FC, useState } from 'react';
+} from "@/utils";
+import React, { FC, useState } from "react";
 
 type Props = {
   onDataLoaded: (data: RecordData[]) => void;
@@ -26,29 +26,29 @@ const ImportComponent: FC<Props> = ({ onDataLoaded }) => {
       return;
     }
     const reader = new FileReader();
-    reader.onload = async e => {
+    reader.onload = async (e) => {
       if (!e.target || !file) {
         return;
       }
       const data = e.target.result as string;
-      const fileType = file.name.split('.').pop();
+      const fileType = file.name.split(".").pop();
 
       let parsedData: RecordData[] = [];
       switch (fileType) {
-        case 'csv':
+        case "csv":
           parsedData = await convertCSVToData(data);
           break;
-        case 'kml':
+        case "kml":
           parsedData = convertGeoJsonToData(convertKMLToGeoJson(data));
           break;
-        case 'gpx':
+        case "gpx":
           parsedData = convertGeoJsonToData(convertGPXToGeoJson(data));
           break;
-        case 'geojson':
+        case "geojson":
           parsedData = convertGeoJsonToData(JSON.parse(data));
           break;
         default:
-          alert('Unsupported file format');
+          alert("Unsupported file format");
           return;
       }
       onDataLoaded(parsedData);
@@ -59,10 +59,7 @@ const ImportComponent: FC<Props> = ({ onDataLoaded }) => {
   return (
     <div className="p-4">
       <input type="file" onChange={handleFileChange} />
-      <button
-        onClick={handleFileRead}
-        className="bg-blue-500 text-white p-2 rounded"
-      >
+      <button onClick={handleFileRead} className="bg-blue-500 text-white p-2 rounded">
         ファイルを読み込む
       </button>
     </div>

@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useState } from 'react';
-import { CSVLink } from 'react-csv';
-import { convertDataToGeoJSON, convertGeoJsonToKML } from '@/utils/convert';
-import { RecordData } from '@/utils/convert';
-import { GeoJSON as GeoJSONType } from 'geojson';
+import React, { FC, useEffect, useState } from "react";
+import { CSVLink } from "react-csv";
+import { convertDataToGeoJSON, convertGeoJsonToKML } from "@/utils/convert";
+import { RecordData } from "@/utils/convert";
+import { GeoJSON as GeoJSONType } from "geojson";
 
 type Props = {
   data: RecordData[];
@@ -20,18 +20,18 @@ const ExportComponent: FC<Props> = ({ data }) => {
   if (!data || !data.length) {
     return null;
   }
-  const headers = Object.keys(data[0]).map(key => ({ label: key, key }));
+  const headers = Object.keys(data[0]).map((key) => ({ label: key, key }));
 
   const exportToKML = () => {
     const kml = convertGeoJsonToKML(geoData);
     if (!kml) return;
     const blob = new Blob([kml], {
-      type: 'application/vnd.google-earth.kml+xml',
+      type: "application/vnd.google-earth.kml+xml",
     });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'data.kml';
+    link.download = "data.kml";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -40,11 +40,11 @@ const ExportComponent: FC<Props> = ({ data }) => {
   const exportToGeoJSON = () => {
     const geojson = JSON.stringify(geoData);
     if (!geojson) return;
-    const blob = new Blob([geojson], { type: 'application/geo+json' });
+    const blob = new Blob([geojson], { type: "application/geo+json" });
     const url = URL.createObjectURL(blob);
-    const link = document.createElement('a');
+    const link = document.createElement("a");
     link.href = url;
-    link.download = 'data.geojson';
+    link.download = "data.geojson";
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
@@ -82,16 +82,10 @@ const ExportComponent: FC<Props> = ({ data }) => {
       >
         CSVとしてエクスポート
       </CSVLink>
-      <button
-        onClick={exportToKML}
-        className="bg-green-500 text-white p-2 rounded ml-2"
-      >
+      <button onClick={exportToKML} className="bg-green-500 text-white p-2 rounded ml-2">
         KMLとしてエクスポート
       </button>
-      <button
-        onClick={exportToGeoJSON}
-        className="bg-green-500 text-white p-2 rounded ml-2"
-      >
+      <button onClick={exportToGeoJSON} className="bg-green-500 text-white p-2 rounded ml-2">
         GeoJSONとしてエクスポート
       </button>
       {/* <button

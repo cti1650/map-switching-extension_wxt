@@ -1,5 +1,5 @@
-import { FC } from 'react';
-import cc from 'classcat';
+import { FC } from "react";
+import cc from "classcat";
 
 type Props = {
   children: React.ReactNode;
@@ -11,9 +11,9 @@ export const PopupLayout: FC<Props> = ({ children, center = true }) => {
     <div className="w-[500px] min-h-[130px] py-4">
       <div
         className={cc([
-          'h-full flex flex-col gap-2 p-4',
+          "h-full flex flex-col gap-2 p-4",
           {
-            'items-center justify-center': center,
+            "items-center justify-center": center,
           },
         ])}
       >

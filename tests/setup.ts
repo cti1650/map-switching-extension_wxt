@@ -1,6 +1,6 @@
 // tests/setup.ts
-import { afterEach, vi } from 'vitest'
-import { cleanup } from '@testing-library/react'
+import { afterEach, vi } from "vitest";
+import { cleanup } from "@testing-library/react";
 
 // 例: chrome API の最低限モック（必要な分だけ足す）
 declare global {
@@ -12,7 +12,7 @@ globalThis.chrome = {
   i18n: { getMessage: vi.fn((k) => k) },
   runtime: { getURL: (p: string) => p, sendMessage: vi.fn() },
   tabs: { create: vi.fn(), query: vi.fn(), sendMessage: vi.fn() },
-} as any
+} as any;
 
 // webextension-polyfill を使っている場合の例（必要なときだけ）
 // vi.mock('webextension-polyfill', () => ({
@@ -20,5 +20,5 @@ globalThis.chrome = {
 // }))
 
 afterEach(() => {
-  cleanup()
-})
+  cleanup();
+});

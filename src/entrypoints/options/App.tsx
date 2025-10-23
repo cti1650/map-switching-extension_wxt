@@ -1,10 +1,7 @@
-import DataManagement from '@/component/DataManagement/DataManagement';
+import DataManagement from "@/component/DataManagement/DataManagement";
 
 function App() {
-
-  return (
-    <DataManagement />
-  );
+  return <DataManagement />;
 }
 
 export default App;
