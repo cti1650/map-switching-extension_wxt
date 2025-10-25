@@ -7,10 +7,9 @@ export default defineConfig({
   manifest: {
     name: "Map Switching Extension",
     description: "Map Switching Extension",
-    version: "1.0.5",
     permissions: ["tabs"],
   },
-  modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons"],
+  modules: ["@wxt-dev/module-react", "@wxt-dev/auto-icons", "./src/modules/sync-version.ts"],
   alias: {
     $component: path.resolve("./src/component"),
     $hooks: path.resolve("./src/hooks"),
