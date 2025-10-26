@@ -55,7 +55,8 @@
     "wxt": "^0.20.11"
   },
   "simple-git-hooks": {
-    "pre-commit": "npx lint-staged"
+    "pre-commit": "npx lint-staged",
+    "pre-push": "yarn format"
   },
   "lint-staged": {
     "*.{mjs,js,jsx,ts,tsx,css,json}": "prettier --write",
