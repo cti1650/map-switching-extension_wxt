@@ -1,0 +1,49 @@
+name: Test
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    container: node:22
+    steps:
+      - uses: actions/checkout@v5
+
+      # Yarn v1 を Corepack で有効化
+      - name: Setup Yarn (v1)
+        run: |
+          corepack enable
+          corepack prepare yarn@1.22.22 --activate
+          yarn --version
+
+      - name: Setup cache
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cache/yarn
+            node_modules
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      - name: Check formatting
+        run: yarn format
+
+      - name: Run ESLint
+        run: yarn lint
+
+      - name: Run TypeScript check
+        run: yarn compile
+
+      - name: Run unit tests
+        run: yarn test
+
+      - name: Run build
+        run: yarn build
+
+      - name: Run E2E tests
+        run: yarn e2e
