@@ -20,7 +20,8 @@
     "lint:fix": "eslint . --ext .ts,.tsx,.js --fix",
     "format": "prettier --check .",
     "format:fix": "prettier --write .",
-    "e2e": "playwright test"
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "classcat": "^5.0.5",
