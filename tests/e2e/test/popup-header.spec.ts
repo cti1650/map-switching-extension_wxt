@@ -1,4 +1,4 @@
-import { test, expect } from "../fixtures";
+import { expect, test } from "../fixtures";
 import { ExtensionPopupPage } from "../pom/ext-popup.page";
 import { GoogleMapPage } from "../pom/google-map.page";
 import { GsiMapPage } from "../pom/gsi-map.page";

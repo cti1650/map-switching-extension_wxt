@@ -1,5 +1,5 @@
-import { expect, describe, test } from "vitest";
-import { convertMapPosition, getMapPosition, getMapLink } from "./util";
+import { describe, expect, test } from "vitest";
+import { convertMapPosition, getMapLink, getMapPosition } from "./util";
 
 describe("util", () => {
   test("convertMapPosition", () => {

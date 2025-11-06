@@ -1,4 +1,4 @@
-import { FC, useCallback } from "react";
+import { type FC, useCallback } from "react";
 import QRCode from "react-qr-code";
 
 type ButtonProps = {
@@ -15,6 +15,7 @@ export const Button: FC<ButtonProps> = (props) => {
   return (
     <>
       <button
+        type="button"
         className="w-full py-1 border border-gray-400 bg-gray-300 rounded-lg shadow"
         onClick={handleClick}
       >
@@ -45,11 +46,12 @@ export const ButtonPanel: FC<ButtonPanelProps> = (props) => {
             style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             className="w-full h-auto max-w-full"
             value={src}
-            viewBox={`0 0 256 256`}
+            viewBox={"0 0 256 256"}
           />
         </div>
       </div>
       <button
+        type="button"
         className="w-full py-1 text-xs border border-gray-400 bg-gray-300 rounded-lg shadow"
         onClick={handleClick}
       >
