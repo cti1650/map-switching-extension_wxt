@@ -40,7 +40,17 @@
     }
   },
   "files": {
-    "include": ["src/**/*", "tests/**/*", "*.ts", "*.tsx", "*.js", "*.jsx", "*.mjs", "*.cjs"],
+    "include": [
+      "src/**/*",
+      "tests/**/*",
+      "*.ts",
+      "*.tsx",
+      "*.js",
+      "*.jsx",
+      "*.mjs",
+      "*.cjs",
+      "*.json"
+    ],
     "ignore": [
       "node_modules",
       "dist",
