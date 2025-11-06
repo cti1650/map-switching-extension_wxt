@@ -16,10 +16,10 @@
     "postinstall": "wxt prepare",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint . --ext .ts,.tsx,.js",
-    "lint:fix": "eslint . --ext .ts,.tsx,.js --fix",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
     "e2e": "playwright test",
     "e2e:ui": "playwright test --ui"
   },
@@ -40,19 +40,14 @@
     "@types/proj4": "^2.19.0",
     "@types/react": "^18.3.26",
     "@types/react-dom": "^18.3.7",
-    "@typescript-eslint/eslint-plugin": "^8.46.2",
-    "@typescript-eslint/parser": "^8.46.2",
     "@wxt-dev/auto-icons": "^1.1.0",
     "@wxt-dev/module-react": "^1.1.5",
     "autoprefixer": "^10.4.21",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
     "jsdom": "^27.0.1",
     "lint-staged": "^16.2.5",
     "playwright": "^1.56.1",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
+    "@biomejs/biome": "^1.9.4",
     "simple-git-hooks": "^2.13.1",
     "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3",
@@ -64,7 +59,10 @@
     "pre-push": "yarn format"
   },
   "lint-staged": {
-    "*.{mjs,js,jsx,ts,tsx,css,json}": "prettier --write",
-    "*.{js,jsx,ts,tsx}": "eslint --fix"
+    "*.{mjs,js,jsx,ts,tsx,css,json}": "biome format --write",
+    "*.{js,jsx,ts,tsx}": "biome check --write"
+  },
+  "volta": {
+    "node": "22.18.0"
   }
 }
