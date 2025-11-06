@@ -1,19 +1,11 @@
-import { Page } from "playwright/test";
+import type { Page } from "playwright/test";
 import { BasePage } from "./base.page";
 
 export class ExtensionPopupPage extends BasePage {
   /**
-   * ExtensionPopupPageクラスのコンストラクタ
-   * @param page Playwrightのページオブジェクト
-   */
-  constructor(page: Page) {
-    super(page);
-  }
-
-  /**
    * 拡張機能のpopupページにアクセス
    */
-  async goto(extensionId: string = "", query: string = ""): Promise<void> {
+  async goto(extensionId = "", query = ""): Promise<void> {
     await this.page.goto(`chrome-extension://${extensionId}/popup.html${query}`);
   }
 
@@ -31,7 +23,7 @@ export class ExtensionPopupPage extends BasePage {
   /**
    * ボタンを押して地図リンクを開く
    */
-  async openMapLink(text: string = ""): Promise<Page> {
+  async openMapLink(text = ""): Promise<Page> {
     const button = this.page.getByText(text).first();
     const promiseOpenNewTab = this.page.context().waitForEvent("page");
     await button.click();

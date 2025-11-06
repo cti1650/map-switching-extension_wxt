@@ -1,8 +1,8 @@
-import { render } from "@testing-library/react";
-import { screen } from "@testing-library/dom";
 import { PopupPage } from "@/component/Page";
 import { getMapLink, getMapPosition } from "@/utils/util";
-import { describe, it, expect } from "vitest";
+import { screen } from "@testing-library/dom";
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 describe("Popup(React)", () => {
   it("URLから位置情報を取得する", async () => {

@@ -1,15 +1,7 @@
-import { Page } from "playwright/test";
+import type { Page } from "playwright/test";
 import { BasePage } from "./base.page";
 
 export class GsiMapPage extends BasePage {
-  /**
-   * GsiMapPageクラスのコンストラクタ
-   * @param page Playwrightのページオブジェクト
-   */
-  constructor(page: Page) {
-    super(page);
-  }
-
   /**
    * 検索結果のテキストを取得
    */
