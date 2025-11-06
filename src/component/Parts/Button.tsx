@@ -40,7 +40,7 @@ export const ButtonPanel: FC<ButtonPanelProps> = (props) => {
     <div className="w-full flex flex-col p-2">
       <h2 className="text-lg text-center font-extrabold">{title}</h2>
       <div>
-        <div className="h-auto w-full max-w-128 mx-auto my-0 p-2">
+        <div className="h-auto w-full max-w-lg mx-auto my-0 p-2">
           <QRCode
             size={256}
             style={{ height: "auto", maxWidth: "100%", width: "100%" }}
