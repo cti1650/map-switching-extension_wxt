@@ -12,4 +12,15 @@ export class YahooMapPage extends BasePage {
     }
     return null;
   }
+
+  /**
+   * 検索結果の備考情報を取得
+   */
+  async getSearchResultNote(): Promise<string | null> {
+    const note = await this.page.waitForSelector(".POI__contentRuby");
+    if (note) {
+      return await note.textContent();
+    }
+    return null;
+  }
 }
