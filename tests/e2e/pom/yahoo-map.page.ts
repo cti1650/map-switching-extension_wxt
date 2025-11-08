@@ -14,10 +14,10 @@ export class YahooMapPage extends BasePage {
   }
 
   /**
-   * 検索結果の備考情報を取得
+   * 指定された地点の場合の座標情報を取得
    */
-  async getSearchResultNote(): Promise<string | null> {
-    const note = await this.page.waitForSelector(".POI__contentRuby");
+  async getSearchResultCoordinates(): Promise<string | null> {
+    const note = await this.page.waitForSelector(".POI__contentLngLat");
     if (note) {
       return await note.textContent();
     }

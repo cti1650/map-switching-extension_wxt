@@ -38,8 +38,8 @@ test("Popup Open Yahoo Map", async ({ page, extensionId }) => {
 
   expect(resultPageUrl).toContain("map.yahoo.co.jp/place");
   if (searchResultText === "指定された地点") {
-    const searchResultNote = await yahooMapPage.getSearchResultNote();
-    expect(searchResultNote).toContain("35.709635");
+    const searchResultCoordinates = await yahooMapPage.getSearchResultCoordinates();
+    expect(searchResultCoordinates).toContain("35.709635");
     return;
   }
   expect(searchResultText).toContain("東京都墨田区押上１丁目１");
