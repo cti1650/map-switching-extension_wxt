@@ -31,6 +31,7 @@
     "react-qr-code": "^2.0.18"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.1.14",
     "@testing-library/dom": "^10.4.1",
@@ -47,12 +48,12 @@
     "lint-staged": "^16.2.5",
     "playwright": "^1.56.1",
     "postcss": "^8.5.6",
-    "@biomejs/biome": "^1.9.4",
     "simple-git-hooks": "^2.13.1",
     "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4",
-    "wxt": "^0.20.11"
+    "wxt": "^0.20.11",
+    "yarn-audit-fix": "^10.1.1"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged",
