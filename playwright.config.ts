@@ -18,6 +18,10 @@ export default defineConfig({
   use: {
     // Collect trace when retrying the failed test.
     trace: "on-first-retry",
+    // Record video only on failure
+    video: "retain-on-failure",
+    // Take screenshot only on failure
+    screenshot: "only-on-failure",
   },
 
   // Configure projects for major browsers.

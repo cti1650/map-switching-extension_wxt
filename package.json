@@ -60,8 +60,8 @@
     "pre-push": "yarn format"
   },
   "lint-staged": {
-    "*.{mjs,js,jsx,ts,tsx,css,json}": "biome format --write",
-    "*.{js,jsx,ts,tsx}": "biome check --write"
+    "*.{mjs,js,jsx,ts,tsx,css,json}": "biome format --write --no-errors-on-unmatched",
+    "*.{js,jsx,ts,tsx}": "biome check --write --no-errors-on-unmatched"
   },
   "volta": {
     "node": "22.18.0"
