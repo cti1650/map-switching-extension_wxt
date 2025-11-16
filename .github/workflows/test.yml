@@ -51,11 +51,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v5
 
-      - name: Setup Action
-        uses: ./.github/workflows/actions/setup
-
-      - name: Install Playwright browsers
-        run: yarn playwright install --with-deps
+      - name: Setup Browser Action
+        uses: ./.github/workflows/actions/setup-browser
 
       - name: Run extension build for E2E tests
         run: yarn build
