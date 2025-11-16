@@ -17,9 +17,9 @@ runs:
         path: |
           ~/.yarn-cache
           node_modules
-        key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
+        key: ${{ runner.os }}-store-${{ hashFiles('yarn.lock') }}
         restore-keys: |
-          ${{ runner.os }}-yarn-
+          ${{ runner.os }}-store-
 
     - name: Install dependencies
       if: steps.cache-store.outputs.cache-hit != 'true'
