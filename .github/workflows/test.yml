@@ -7,9 +7,6 @@ on:
     branches: [master, develop]
   workflow_dispatch:
 
-env:
-  NODE_VERSION: 22
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
@@ -20,21 +17,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-
-      - name: Enable Corepack
-        run: |
-          corepack enable
-          corepack prepare yarn@1.22.22 --activate
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Action
+        uses: ./.github/workflows/actions/setup
 
       - name: Check formatting
         run: yarn format
@@ -50,21 +36,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-
-      - name: Enable Corepack
-        run: |
-          corepack enable
-          corepack prepare yarn@1.22.22 --activate
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Action
+        uses: ./.github/workflows/actions/setup
 
       - name: Run unit tests
         run: yarn test
@@ -74,21 +49,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-
-      - name: Enable Corepack
-        run: |
-          corepack enable
-          corepack prepare yarn@1.22.22 --activate
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Action
+        uses: ./.github/workflows/actions/setup
 
       - name: Install Playwright browsers
         run: yarn playwright install --with-deps
@@ -113,21 +77,10 @@ jobs:
     needs: [lint-and-typecheck, unit-test]
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-
-      - name: Enable Corepack
-        run: |
-          corepack enable
-          corepack prepare yarn@1.22.22 --activate
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Action
+        uses: ./.github/workflows/actions/setup
 
       - name: Build Chrome extension
         run: yarn build
@@ -157,24 +110,13 @@ jobs:
   security-check:
     name: Security Scan
     runs-on: ubuntu-latest
-    if: false  # TODO: 参考用に残す。後で有効化すること。
+    if: false # TODO: 参考用に残す。後で有効化すること。
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: ${{ env.NODE_VERSION }}
-          cache: yarn
-
-      - name: Enable Corepack
-        run: |
-          corepack enable
-          corepack prepare yarn@1.22.22 --activate
-
-      - name: Install dependencies
-        run: yarn install --frozen-lockfile
+      - name: Setup Action
+        uses: ./.github/workflows/actions/setup
 
       - name: Run security audit
         run: yarn audit --level critical
