@@ -5,12 +5,7 @@ on:
 
 jobs:
   ci:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v5
-
-      - name: Run CI Tests
-        uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/test.yml
 
   submit:
     runs-on: ubuntu-latest
