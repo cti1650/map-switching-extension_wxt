@@ -10,14 +10,18 @@ runs:
         node-version-file: package.json
         cache: yarn
 
-    - name: Cache yarn store
+    - name: Restore Cache
+      id: cache-store
       uses: actions/cache@v4
       with:
-        path: ~/.yarn-cache
+        path: |
+          ~/.yarn-cache
+          node_modules
         key: ${{ runner.os }}-yarn-${{ hashFiles('yarn.lock') }}
         restore-keys: |
           ${{ runner.os }}-yarn-
 
     - name: Install dependencies
+      if: steps.cache-store.outputs.cache-hit != 'true'
       run: yarn install --frozen-lockfile
       shell: bash
