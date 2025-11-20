@@ -22,5 +22,6 @@ runs:
           ${{ runner.os }}-store-
 
     - name: Install dependencies
+      if: steps.cache-store.outputs.cache-hit != 'true'
       run: yarn install --frozen-lockfile --prefer-offline
       shell: bash
