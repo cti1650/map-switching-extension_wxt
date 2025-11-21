@@ -24,3 +24,5 @@ runs:
     - name: Install dependencies
       run: yarn install --immutable
       shell: bash
+      env:
+        SKIP_INSTALL_SIMPLE_GIT_HOOKS: 1
