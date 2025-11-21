@@ -56,7 +56,7 @@ jobs:
         uses: ./.github/workflows/actions/setup
 
       - name: Setup Browser Action
-        uses: cti1650/github-actions-test/.github/workflows/shared/setup-playwright/action.yml@main
+        uses: cti1650/github-actions-test/.github/actions/setup-playwright/action.yml@main
 
       - name: Run extension build for E2E tests
         run: yarn build
