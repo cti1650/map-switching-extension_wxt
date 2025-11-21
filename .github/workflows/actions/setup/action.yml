@@ -22,5 +22,5 @@ runs:
           ${{ runner.os }}-store-
 
     - name: Install dependencies
-      run: yarn install --frozen-lockfile --prefer-offline
+      run: yarn install --immutable
       shell: bash
