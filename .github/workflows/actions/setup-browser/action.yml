@@ -4,19 +4,16 @@ description: "A GitHub Action to setup Node.js, yarn environment, and browsers f
 runs:
   using: "composite"
   steps:
-    - name: Setup Action
-      uses: ./.github/workflows/actions/setup
-
     - name: Browser Cache
       id: browser-cache
       uses: actions/cache@v4
       with:
         path: ~/.cache/ms-playwright
-        key: ${{ runner.os }}-playwright-${{ hashFiles('yarn.lock') }}
+        key: ${{ runner.os }}-playwright-${{ hashFiles('package.json') }}
         restore-keys: |
           ${{ runner.os }}-playwright-
 
     - name: Install Playwright browsers
       if: steps.browser-cache.outputs.cache-hit != 'true'
-      run: yarn playwright install --with-deps
+      run: npx playwright install --with-deps
       shell: bash
