@@ -21,7 +21,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: ./.github/workflows/actions/setup
+        uses: cti1650/github-actions/.github/actions/setup-yarn@main
 
       - name: Check formatting
         run: yarn format
@@ -40,7 +40,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: ./.github/workflows/actions/setup
+        uses: cti1650/github-actions/.github/actions/setup-yarn@main
 
       - name: Run unit tests
         run: yarn test
@@ -53,7 +53,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: ./.github/workflows/actions/setup
+        uses: cti1650/github-actions/.github/actions/setup-yarn@main
 
       - name: Setup Browser Action
         uses: cti1650/github-actions/.github/actions/setup-playwright@main
@@ -81,7 +81,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: ./.github/workflows/actions/setup
+        uses: cti1650/github-actions/.github/actions/setup-yarn@main
 
       - name: Build Chrome extension
         run: yarn build
@@ -117,7 +117,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: ./.github/workflows/actions/setup
+        uses: cti1650/github-actions/.github/actions/setup-yarn@main
 
       - name: Run security audit
         run: yarn audit --level critical
