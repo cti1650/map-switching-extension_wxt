@@ -56,7 +56,7 @@ jobs:
         uses: cti1650/github-actions/.github/actions/setup-yarn@main
 
       - name: Setup Browser Action
-        uses: cti1650/github-actions/.github/actions/setup-playwright@main
+        uses: cti1650/github-actions/.github/actions/setup-playwright-chromium@main
 
       - name: Run extension build for E2E tests
         run: yarn build
