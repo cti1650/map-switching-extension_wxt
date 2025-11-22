@@ -22,6 +22,8 @@ export default defineConfig({
     video: "retain-on-failure",
     // Take screenshot only on failure
     screenshot: "only-on-failure",
+    // timeout for each action
+    actionTimeout: 10 * 1000,
   },
 
   // Configure projects for major browsers.
