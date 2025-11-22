@@ -12,7 +12,7 @@ describe("Popup(React)", () => {
     const links = getMapLink(data);
     render(<PopupPage links={links} url={url} />);
     const button = screen.getByRole("heading", { name: "Google Map" });
-    expect(button).not.toBeNull();
+    expect(button).toBeTruthy();
   });
   it("対応していないURLの場合", async () => {
     const url = "https://www.example.com/";
@@ -20,6 +20,6 @@ describe("Popup(React)", () => {
     const links = getMapLink(data);
     render(<PopupPage links={links} url={url} />);
     const divElement = screen.getByText("マップ変換に対応していないサイトのようです…");
-    expect(divElement).not.toBeNull();
+    expect(divElement).toBeTruthy();
   });
 });
