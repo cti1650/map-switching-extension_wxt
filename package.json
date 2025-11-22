@@ -2,7 +2,7 @@
   "name": "map-switching-extension_wxt",
   "description": "manifest.json description",
   "private": true,
-  "version": "1.0.5",
+  "version": "1.0.7",
   "type": "module",
   "scripts": {
     "prepare": "simple-git-hooks",
@@ -16,11 +16,12 @@
     "postinstall": "wxt prepare",
     "test": "vitest run",
     "test:watch": "vitest",
-    "lint": "eslint . --ext .ts,.tsx,.js",
-    "lint:fix": "eslint . --ext .ts,.tsx,.js --fix",
-    "format": "prettier --check .",
-    "format:fix": "prettier --write .",
-    "e2e": "playwright test"
+    "lint": "biome check .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format .",
+    "format:fix": "biome format --write .",
+    "e2e": "playwright test",
+    "e2e:ui": "playwright test --ui"
   },
   "dependencies": {
     "@fulcrumapp/tokml": "^0.7.1",
@@ -42,6 +43,7 @@
     "react-table": "^7.8.0"
   },
   "devDependencies": {
+    "@biomejs/biome": "^1.9.4",
     "@playwright/test": "^1.56.1",
     "@tailwindcss/postcss": "^4.1.14",
     "@testing-library/dom": "^10.4.1",
@@ -60,26 +62,30 @@
     "@wxt-dev/auto-icons": "^1.1.0",
     "@wxt-dev/module-react": "^1.1.5",
     "autoprefixer": "^10.4.21",
-    "eslint": "^8.57.1",
-    "eslint-config-prettier": "^10.1.8",
-    "eslint-plugin-prettier": "^5.5.4",
     "jsdom": "^27.0.1",
     "lint-staged": "^16.2.5",
     "playwright": "^1.56.1",
     "postcss": "^8.5.6",
-    "prettier": "^3.6.2",
     "simple-git-hooks": "^2.13.1",
     "tailwindcss": "^4.1.14",
     "typescript": "^5.9.3",
     "vitest": "^3.2.4",
-    "wxt": "^0.20.11"
+    "wxt": "^0.20.11",
+    "yarn-audit-fix": "^10.1.1"
   },
   "simple-git-hooks": {
     "pre-commit": "npx lint-staged",
     "pre-push": "yarn format"
   },
   "lint-staged": {
-    "*.{mjs,js,jsx,ts,tsx,css,json}": "prettier --write",
-    "*.{js,jsx,ts,tsx}": "eslint --fix"
-  }
+    "*.{mjs,js,jsx,ts,tsx,css,json}": "biome format --write --no-errors-on-unmatched",
+    "*.{js,jsx,ts,tsx}": "biome check --write --no-errors-on-unmatched"
+  },
+  "volta": {
+    "node": "22.18.0"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "packageManager": "yarn@1.22.22"
 }

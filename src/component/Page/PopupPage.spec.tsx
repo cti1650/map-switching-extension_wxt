@@ -1,8 +1,8 @@
-import { render } from "@testing-library/react";
-import { screen } from "@testing-library/dom";
 import { PopupPage } from "@/component/Page";
 import { getMapLink, getMapPosition } from "@/utils/util";
-import { describe, it, expect } from "vitest";
+import { screen } from "@testing-library/dom";
+import { render } from "@testing-library/react";
+import { describe, expect, it } from "vitest";
 
 describe("Popup(React)", () => {
   it("URLから位置情報を取得する", async () => {
@@ -12,7 +12,7 @@ describe("Popup(React)", () => {
     const links = getMapLink(data);
     render(<PopupPage links={links} url={url} />);
     const button = screen.getByRole("heading", { name: "Google Map" });
-    expect(button).not.toBeNull();
+    expect(button).toBeTruthy();
   });
   it("対応していないURLの場合", async () => {
     const url = "https://www.example.com/";
@@ -20,6 +20,6 @@ describe("Popup(React)", () => {
     const links = getMapLink(data);
     render(<PopupPage links={links} url={url} />);
     const divElement = screen.getByText("マップ変換に対応していないサイトのようです…");
-    expect(divElement).not.toBeNull();
+    expect(divElement).toBeTruthy();
   });
 });

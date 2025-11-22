@@ -1,5 +1,5 @@
-import { FC } from "react";
 import cc from "classcat";
+import type { FC } from "react";
 
 type Props = {
   children: React.ReactNode;

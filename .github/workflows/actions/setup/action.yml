@@ -1,0 +1,28 @@
+name: "Setup Action"
+description: "A GitHub Action to setup Node.js and yarn environment."
+
+runs:
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version-file: package.json
+        cache: yarn
+
+    - name: Restore Cache
+      id: cache-store
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.yarn-cache
+          node_modules
+        key: ${{ runner.os }}-store-${{ hashFiles('yarn.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-store-
+
+    - name: Install dependencies
+      run: yarn install --immutable
+      shell: bash
+      env:
+        SKIP_INSTALL_SIMPLE_GIT_HOOKS: 1

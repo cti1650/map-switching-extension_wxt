@@ -30,6 +30,12 @@ yarn build
 yarn zip
 ```
 
+### e2e
+
+```
+yarn e2e
+```
+
 ## 参考サイト
 
 - [Next-gen Web Extension Framework – WXT](https://wxt.dev/)

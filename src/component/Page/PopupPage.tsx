@@ -1,4 +1,4 @@
-import { FC } from "react";
+import type { FC } from "react";
 import { PopupLayout } from "../Layout";
 import { ButtonPanel } from "../Parts";
 

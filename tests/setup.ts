@@ -1,6 +1,5 @@
-// tests/setup.ts
-import { afterEach, vi } from "vitest";
 import { cleanup } from "@testing-library/react";
+import { afterEach, vi } from "vitest";
 
 // 例: chrome API の最低限モック（必要な分だけ足す）
 declare global {

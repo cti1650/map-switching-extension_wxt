@@ -1,4 +1,4 @@
-import { MapLink, MapPosition, getMapLink, getMapPosition } from "@/utils/util";
+import { type MapLink, type MapPosition, getMapLink, getMapPosition } from "@/utils/util";
 import { useEffect, useState } from "react";
 
 export const useMapGeoData = (url: string | null) => {

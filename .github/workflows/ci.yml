@@ -1,12 +1,7 @@
-name: Test
+name: CI
 
 on:
-  push:
-    branches: [master, develop]
-  pull_request:
-    branches: [master, develop]
   workflow_dispatch:
-  workflow_call:
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -21,7 +16,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: cti1650/github-actions/.github/actions/setup-yarn@main
+        uses: ./.github/workflows/actions/setup
 
       - name: Check formatting
         run: yarn format
@@ -40,7 +35,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: cti1650/github-actions/.github/actions/setup-yarn@main
+        uses: ./.github/workflows/actions/setup
 
       - name: Run unit tests
         run: yarn test
@@ -53,10 +48,10 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: cti1650/github-actions/.github/actions/setup-yarn@main
+        uses: ./.github/workflows/actions/setup
 
       - name: Setup Browser Action
-        uses: cti1650/github-actions/.github/actions/setup-playwright-chromium@main
+        uses: ./.github/workflows/actions/setup-browser
 
       - name: Run extension build for E2E tests
         run: yarn build
@@ -81,7 +76,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: cti1650/github-actions/.github/actions/setup-yarn@main
+        uses: ./.github/workflows/actions/setup
 
       - name: Build Chrome extension
         run: yarn build
@@ -117,7 +112,7 @@ jobs:
         uses: actions/checkout@v5
 
       - name: Setup Action
-        uses: cti1650/github-actions/.github/actions/setup-yarn@main
+        uses: ./.github/workflows/actions/setup
 
       - name: Run security audit
         run: yarn audit --level critical

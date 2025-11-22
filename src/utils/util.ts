@@ -31,7 +31,8 @@ export const getMapPosition = (url: string): MapPosition | null => {
         lat: Number(ex2[1]),
         long: Number(ex2[2]),
       };
-    } else if (ex) {
+    }
+    if (ex) {
       return {
         url: url,
         gcs: "wgs84",
