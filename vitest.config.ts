@@ -1,7 +1,9 @@
 import { defineConfig } from "vitest/config";
+import { WxtVitest } from "wxt/testing";
 import path from "node:path";
 
 export default defineConfig({
+  plugins: [WxtVitest()],
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"), // ← これ！
