@@ -2,7 +2,7 @@
   "name": "map-switching-extension_wxt",
   "description": "manifest.json description",
   "private": true,
-  "version": "1.0.21",
+  "version": "1.0.23",
   "type": "module",
   "scripts": {
     "prepare": "simple-git-hooks",
