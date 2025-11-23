@@ -28,13 +28,25 @@ jobs:
           VERSION=${TAG#v}
           echo "Using version: $VERSION"
 
-          # package.json の version を上書き
+          # package.json の version を更新
           jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
 
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+
           git add package.json
           git commit -m "chore: bump version to $VERSION" || echo "No changes"
+
+      - name: Push version update to master
+        run: |
+          # master ブランチに書き戻す
+          git fetch origin master
+          git checkout master
+          git pull
+          git merge $GITHUB_SHA --no-edit || true
+          git push origin master
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Zip extensions
         run: |
