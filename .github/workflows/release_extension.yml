@@ -22,37 +22,13 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 現在の package.json の version を取得
-      - name: Read current version
-        id: current
-        run: |
-          CURRENT=$(jq -r '.version' package.json)
-          echo "current=$CURRENT" >> $GITHUB_OUTPUT
-
-      # タグから version を抽出
-      - name: Extract version from tag
-        id: tag
-        run: |
-          TAG=${GITHUB_REF##*/}
-          VERSION=${TAG#v}
-          echo "tag_version=$VERSION" >> $GITHUB_OUTPUT
-
-      # version が違うかどうかで分岐
-      - name: Determine if version bump is needed
-        id: bump
-        run: |
-          if [ "${{ steps.current.outputs.current }}" = "${{ steps.tag.outputs.tag_version }}" ]; then
-            echo "changed=false" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          echo "changed=true" >> $GITHUB_OUTPUT
-
-      # version が違う場合だけ package.json を更新
-      - name: Update package.json version
-        if: steps.bump.outputs.changed == 'true'
-        run: |
-          VERSION="${{ steps.tag.outputs.tag_version }}"
-          jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
+      # バージョンチェック&更新(分離したアクション)
+      - name: Check and update version
+        id: version
+        uses: ./.github/workflows/actions/check-version
+        with:
+          tag: ${{ github.ref_name }}
+          update_package_json: "true"
 
       # --- ここでビルド処理(更新されたバージョンで) ---
       - name: Setup Action
@@ -66,14 +42,17 @@ jobs:
 
       # PRを作成(バージョンが変更された場合のみ)
       - name: Create Pull Request
-        if: steps.bump.outputs.changed == 'true'
+        if: steps.version.outputs.needs_bump == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
-          branch: release/v${{ steps.tag.outputs.tag_version }}
-          commit-message: "chore: bump version to ${{ steps.tag.outputs.tag_version }}"
-          title: "Release v${{ steps.tag.outputs.tag_version }}"
+          branch: release/v${{ steps.version.outputs.tag_version }}
+          commit-message: "chore: bump version to ${{ steps.version.outputs.tag_version }}"
+          title: "Release v${{ steps.version.outputs.tag_version }}"
           body: |
-            タグ **v${{ steps.tag.outputs.tag_version }}** に基づく自動生成PRです。
+            タグ **v${{ steps.version.outputs.tag_version }}** に基づく自動生成PRです。
+
+            - Current version: `${{ steps.version.outputs.current_version }}`
+            - New version: `${{ steps.version.outputs.tag_version }}`
           base: master
 
       - name: Submit to stores

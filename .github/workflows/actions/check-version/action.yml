@@ -1,0 +1,65 @@
+name: Check Version
+description: Compare package.json version with git tag version and optionally update it
+
+inputs:
+  tag:
+    description: "Git tag (e.g., v1.2.3)"
+    required: true
+  update_package_json:
+    description: "Whether to update package.json if version differs (true/false)"
+    required: false
+    default: "false"
+
+outputs:
+  current_version:
+    description: "Current version in package.json"
+    value: ${{ steps.current.outputs.version }}
+  tag_version:
+    description: "Version extracted from tag"
+    value: ${{ steps.tag.outputs.version }}
+  needs_bump:
+    description: "Whether version bump is needed (true/false)"
+    value: ${{ steps.compare.outputs.needs_bump }}
+  updated:
+    description: "Whether package.json was updated (true/false)"
+    value: ${{ steps.update.outputs.updated }}
+
+runs:
+  using: composite
+  steps:
+    - name: Read current version
+      id: current
+      shell: bash
+      run: |
+        CURRENT=$(jq -r '.version' package.json)
+        echo "version=$CURRENT" >> $GITHUB_OUTPUT
+
+    - name: Extract version from tag
+      id: tag
+      shell: bash
+      run: |
+        TAG="${{ inputs.tag }}"
+        VERSION=${TAG#v}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+    - name: Compare versions
+      id: compare
+      shell: bash
+      run: |
+        if [ "${{ steps.current.outputs.version }}" = "${{ steps.tag.outputs.version }}" ]; then
+          echo "needs_bump=false" >> $GITHUB_OUTPUT
+        else
+          echo "needs_bump=true" >> $GITHUB_OUTPUT
+        fi
+
+    - name: Update package.json
+      id: update
+      shell: bash
+      run: |
+        if [ "${{ inputs.update_package_json }}" = "true" ] && [ "${{ steps.compare.outputs.needs_bump }}" = "true" ]; then
+          VERSION="${{ steps.tag.outputs.version }}"
+          jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
+          echo "updated=true" >> $GITHUB_OUTPUT
+        else
+          echo "updated=false" >> $GITHUB_OUTPUT
+        fi
