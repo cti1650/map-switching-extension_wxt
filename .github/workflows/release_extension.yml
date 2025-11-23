@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # バージョンチェック&更新(分離したアクション)
+      # バージョンチェック&更新
       - name: Check and update version
         id: version
         uses: ./.github/workflows/actions/check-version
@@ -30,17 +30,19 @@ jobs:
           tag: ${{ github.ref_name }}
           update_package_json: "true"
 
-      # --- ここでビルド処理(更新されたバージョンで) ---
+      # Node.js のセットアップ
       - name: Setup Action
         uses: ./.github/workflows/actions/setup
 
+      # ビルド
       - name: Build Chrome extension
         run: yarn build
 
+      # Zip作成
       - name: Zip extensions
         run: yarn zip
 
-      # リリース処理(ビルド後、PR作成前)
+      # ストアに提出
       - name: Submit to stores
         run: |
           yarn wxt submit --dry-run \
@@ -51,18 +53,21 @@ jobs:
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
 
+      # GitHubリリース作成
       - name: Create GitHub Release
         run: |
           gh release create ${{ github.ref_name }} \
             .output/*.zip \
             --title "Release ${{ github.ref_name }}" \
-            --generate-notes
+            --generate-release-notes \
+            --notes "⚠️ Please download the \`.zip\` file below, not the \"Source code\" archives."
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-      # PRを作成(最後に実行)
+      # PRを作成（バージョンが変更された場合のみ）
       - name: Create Pull Request
         if: steps.version.outputs.needs_bump == 'true'
+        id: create_pr
         uses: peter-evans/create-pull-request@v7
         with:
           branch: release/v${{ steps.version.outputs.tag_version }}
@@ -74,3 +79,14 @@ jobs:
             - Current version: `${{ steps.version.outputs.current_version }}`
             - New version: `${{ steps.version.outputs.tag_version }}`
           base: master
+
+      # Auto-mergeを有効化してブランチを削除
+      - name: Enable auto-merge and delete branch
+        if: steps.version.outputs.needs_bump == 'true' && steps.create_pr.outputs.pull-request-number
+        run: |
+          gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} \
+            --auto \
+            --squash \
+            --delete-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
