@@ -83,11 +83,6 @@ jobs:
       # Auto-mergeを有効化してブランチを削除
       - name: Merge pull request and delete branch
         if: steps.version.outputs.needs_bump == 'true' && steps.create_pr.outputs.pull-request-number
-        run: |
-          # auto-mergeを試みる
-          if ! gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --squash --delete-branch 2>/dev/null; then
-            # auto-mergeが失敗したら即座にマージ
-            gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --squash --delete-branch
-          fi
+        run: gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --squash --delete-branch
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
