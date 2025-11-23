@@ -22,7 +22,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ★ これが PR が作られなかった原因を完全に解決するパッチ！
+      # ★ master の最新を取る（ここでは絶対 bump しない）
       - name: Ensure master branch is available
         run: |
           git fetch origin master
@@ -57,17 +57,21 @@ jobs:
           fi
           echo "changed=true" >> $GITHUB_OUTPUT
 
-      # version が違う場合だけ package.json を bump → ブランチ作成
+      # ★ version bump は release ブランチに checkout してから行う（ここが最重要）
       - name: Commit version bump
         if: steps.bump.outputs.changed == 'true'
         run: |
           VERSION="${{ steps.tag.outputs.tag_version }}"
+
+          # master ワークツリーを触らずに release ブランチを切る
+          git checkout -b release/v$VERSION
+
+          # ここで初めて bump
           jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
 
           git config user.name "github-actions"
           git config user.email "actions@github.com"
 
-          git checkout -b release/v$VERSION
           git add package.json
           git commit -m "chore: bump version to $VERSION"
           git push origin HEAD
@@ -87,22 +91,16 @@ jobs:
       - name: Zip extensions
         run: |
           yarn zip
-          # yarn zip:firefox
 
       - name: Submit to stores
         run: |
           yarn wxt submit --dry-run \
-            --chrome-zip .output/*-chrome.zip \
-            # --firefox-zip .output/*-firefox.zip \
-            # --firefox-sources-zip .output/*-sources.zip
+            --chrome-zip .output/*-chrome.zip
         env:
           CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
           CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          # FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
-          # FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
-          # FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
 
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
