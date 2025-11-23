@@ -22,16 +22,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # ★ master の最新を取る（ここでは絶対 bump しない）
-      - name: Ensure master branch is available
-        run: |
-          git fetch origin master
-          git checkout master
-          git pull origin master
-
-      - name: Setup Action
-        uses: ./.github/workflows/actions/setup
-
       # 現在の package.json の version を取得
       - name: Read current version
         id: current
@@ -57,16 +47,13 @@ jobs:
           fi
           echo "changed=true" >> $GITHUB_OUTPUT
 
-      # ★ version bump は release ブランチに checkout してから行う（ここが最重要）
+      # version が違う場合だけ bump ブランチ作成
       - name: Commit version bump
         if: steps.bump.outputs.changed == 'true'
         run: |
           VERSION="${{ steps.tag.outputs.tag_version }}"
-
-          # master ワークツリーを触らずに release ブランチを切る
           git checkout -b release/v$VERSION
 
-          # ここで初めて bump
           jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
 
           git config user.name "github-actions"
@@ -76,7 +63,7 @@ jobs:
           git commit -m "chore: bump version to $VERSION"
           git push origin HEAD
 
-      # version bump が必要なら PR を作る
+      # PRを作成
       - name: Create Pull Request
         if: steps.bump.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
@@ -87,10 +74,12 @@ jobs:
             タグ **v${{ steps.tag.outputs.tag_version }}** に基づく自動生成PRです。
           base: master
 
-      # --- リリース処理 ---
+      # --- ここからリリース処理（タグ基準） ---
+      - name: Setup Action
+        uses: ./.github/workflows/actions/setup
+
       - name: Zip extensions
-        run: |
-          yarn zip
+        run: yarn zip
 
       - name: Submit to stores
         run: |
