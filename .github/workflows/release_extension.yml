@@ -54,7 +54,17 @@ jobs:
           VERSION="${{ steps.tag.outputs.tag_version }}"
           jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
 
-      # PRを作成(自動的にcommit & push & PR作成)
+      # --- ここでビルド処理(更新されたバージョンで) ---
+      - name: Setup Action
+        uses: ./.github/workflows/actions/setup
+
+      - name: Build Chrome extension
+        run: yarn build
+
+      - name: Zip extensions
+        run: yarn zip
+
+      # PRを作成(バージョンが変更された場合のみ)
       - name: Create Pull Request
         if: steps.bump.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
@@ -65,16 +75,6 @@ jobs:
           body: |
             タグ **v${{ steps.tag.outputs.tag_version }}** に基づく自動生成PRです。
           base: master
-
-      # --- ここからリリース処理(タグ基準) ---
-      - name: Setup Action
-        uses: ./.github/workflows/actions/setup
-
-      - name: Build Chrome extension
-        run: yarn build
-
-      - name: Zip extensions
-        run: yarn zip
 
       - name: Submit to stores
         run: |
