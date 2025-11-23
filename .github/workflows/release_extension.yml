@@ -40,21 +40,7 @@ jobs:
       - name: Zip extensions
         run: yarn zip
 
-      # PRを作成(バージョンが変更された場合のみ)
-      - name: Create Pull Request
-        if: steps.version.outputs.needs_bump == 'true'
-        uses: peter-evans/create-pull-request@v7
-        with:
-          branch: release/v${{ steps.version.outputs.tag_version }}
-          commit-message: "chore: bump version to ${{ steps.version.outputs.tag_version }}"
-          title: "Release v${{ steps.version.outputs.tag_version }}"
-          body: |
-            タグ **v${{ steps.version.outputs.tag_version }}** に基づく自動生成PRです。
-
-            - Current version: `${{ steps.version.outputs.current_version }}`
-            - New version: `${{ steps.version.outputs.tag_version }}`
-          base: master
-
+      # リリース処理(ビルド後、PR作成前)
       - name: Submit to stores
         run: |
           yarn wxt submit --dry-run \
@@ -73,3 +59,18 @@ jobs:
             --generate-notes
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # PRを作成(最後に実行)
+      - name: Create Pull Request
+        if: steps.version.outputs.needs_bump == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          branch: release/v${{ steps.version.outputs.tag_version }}
+          commit-message: "chore: bump version to ${{ steps.version.outputs.tag_version }}"
+          title: "Release v${{ steps.version.outputs.tag_version }}"
+          body: |
+            タグ **v${{ steps.version.outputs.tag_version }}** に基づく自動生成PRです。
+
+            - Current version: `${{ steps.version.outputs.current_version }}`
+            - New version: `${{ steps.version.outputs.tag_version }}`
+          base: master
