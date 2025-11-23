@@ -47,34 +47,26 @@ jobs:
           fi
           echo "changed=true" >> $GITHUB_OUTPUT
 
-      # version が違う場合だけ bump ブランチ作成
-      - name: Commit version bump
+      # version が違う場合だけ package.json を更新
+      - name: Update package.json version
         if: steps.bump.outputs.changed == 'true'
         run: |
           VERSION="${{ steps.tag.outputs.tag_version }}"
-          git checkout -b release/v$VERSION
-
           jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
 
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-
-          git add package.json
-          git commit -m "chore: bump version to $VERSION"
-          git push --set-upstream origin release/v$VERSION
-
-      # PRを作成
+      # PRを作成(自動的にcommit & push & PR作成)
       - name: Create Pull Request
         if: steps.bump.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: release/v${{ steps.tag.outputs.tag_version }}
+          commit-message: "chore: bump version to ${{ steps.tag.outputs.tag_version }}"
           title: "Release v${{ steps.tag.outputs.tag_version }}"
           body: |
             タグ **v${{ steps.tag.outputs.tag_version }}** に基づく自動生成PRです。
           base: master
 
-      # --- ここからリリース処理（タグ基準） ---
+      # --- ここからリリース処理(タグ基準) ---
       - name: Setup Action
         uses: ./.github/workflows/actions/setup
 
