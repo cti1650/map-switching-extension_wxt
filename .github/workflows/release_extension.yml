@@ -70,6 +70,9 @@ jobs:
       - name: Setup Action
         uses: ./.github/workflows/actions/setup
 
+      - name: Build Chrome extension
+        run: yarn build
+
       - name: Zip extensions
         run: yarn zip
 
