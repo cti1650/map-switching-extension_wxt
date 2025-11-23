@@ -22,6 +22,13 @@ jobs:
         with:
           fetch-depth: 0
 
+      # ★ これが PR が作られなかった原因を完全に解決するパッチ！
+      - name: Ensure master branch is available
+        run: |
+          git fetch origin master
+          git checkout master
+          git pull origin master
+
       - name: Setup Action
         uses: ./.github/workflows/actions/setup
 
@@ -40,33 +47,34 @@ jobs:
           VERSION=${TAG#v}
           echo "tag_version=$VERSION" >> $GITHUB_OUTPUT
 
-      # version が違う場合だけ package.json を更新
-      - name: Update version if needed
-        id: update
+      # version が違うかどうかで分岐
+      - name: Determine if version bump is needed
+        id: bump
         run: |
           if [ "${{ steps.current.outputs.current }}" = "${{ steps.tag.outputs.tag_version }}" ]; then
             echo "changed=false" >> $GITHUB_OUTPUT
             exit 0
           fi
-
           echo "changed=true" >> $GITHUB_OUTPUT
+
+      # version が違う場合だけ package.json を bump → ブランチ作成
+      - name: Commit version bump
+        if: steps.bump.outputs.changed == 'true'
+        run: |
           VERSION="${{ steps.tag.outputs.tag_version }}"
           jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
 
-      # versionが変わった場合のみ PR 作成
-      - name: Commit version bump
-        if: steps.update.outputs.changed == 'true'
-        run: |
-          VERSION="${{ steps.tag.outputs.tag_version }}"
           git config user.name "github-actions"
           git config user.email "actions@github.com"
+
           git checkout -b release/v$VERSION
           git add package.json
           git commit -m "chore: bump version to $VERSION"
           git push origin HEAD
 
+      # version bump が必要なら PR を作る
       - name: Create Pull Request
-        if: steps.update.outputs.changed == 'true'
+        if: steps.bump.outputs.changed == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           branch: release/v${{ steps.tag.outputs.tag_version }}
@@ -75,7 +83,7 @@ jobs:
             タグ **v${{ steps.tag.outputs.tag_version }}** に基づく自動生成PRです。
           base: master
 
-      # --- ここから publish 処理（常に実行） ---
+      # --- リリース処理 ---
       - name: Zip extensions
         run: |
           yarn zip
@@ -83,7 +91,7 @@ jobs:
 
       - name: Submit to stores
         run: |
-          yarn wxt submit \
+          yarn wxt submit --dry-run \
             --chrome-zip .output/*-chrome.zip \
             # --firefox-zip .output/*-firefox.zip \
             # --firefox-sources-zip .output/*-sources.zip
@@ -92,8 +100,10 @@ jobs:
           CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
+          # FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
+          # FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
+          # FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
 
-      # GitHub Release はタグ単位で常に作成
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
