@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  pull-requests: write
 
 jobs:
   ci:
@@ -14,48 +15,74 @@ jobs:
 
   release:
     runs-on: ubuntu-latest
+    needs: ci
+
     steps:
       - uses: actions/checkout@v5
+        with:
+          fetch-depth: 0
 
+      # バージョンチェック&更新
+      - name: Check and update version
+        id: version
+        uses: ./.github/workflows/actions/check-version
+        with:
+          tag: ${{ github.ref_name }}
+          update_package_json: "true"
+
+      # Node.js のセットアップ
       - name: Setup Action
         uses: ./.github/workflows/actions/setup
 
-      # タグの値（v1.2.3）からバージョンを抽出して package.json に反映
-      - name: Sync version from tag
-        run: |
-          TAG=${GITHUB_REF##*/}
-          VERSION=${TAG#v}
-          echo "Using version: $VERSION"
+      # ビルド
+      - name: Build Chrome extension
+        run: yarn build
 
-          # package.json の version を上書き
-          jq --arg v "$VERSION" '.version = $v' package.json > package.json.tmp && mv package.json.tmp package.json
-
-          git config user.name "github-actions"
-          git config user.email "actions@github.com"
-          git add package.json
-          git commit -m "chore: bump version to $VERSION" || echo "No changes"
-
+      # Zip作成
       - name: Zip extensions
-        run: |
-          yarn zip
-          # yarn zip:firefox
+        run: yarn zip
 
+      # ストアに提出
       - name: Submit to stores
         run: |
-          yarn wxt submit --dry-run \
-            --chrome-zip .output/*-chrome.zip \
-            # --firefox-zip .output/*-firefox.zip --firefox-sources-zip .output/*-sources.zip
+          yarn wxt submit \
+            --chrome-zip .output/*-chrome.zip
         env:
           CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
           CHROME_CLIENT_ID: ${{ secrets.CHROME_CLIENT_ID }}
           CHROME_CLIENT_SECRET: ${{ secrets.CHROME_CLIENT_SECRET }}
           CHROME_REFRESH_TOKEN: ${{ secrets.CHROME_REFRESH_TOKEN }}
-          # FIREFOX_EXTENSION_ID: ${{ secrets.FIREFOX_EXTENSION_ID }}
-          # FIREFOX_JWT_ISSUER: ${{ secrets.FIREFOX_JWT_ISSUER }}
-          # FIREFOX_JWT_SECRET: ${{ secrets.FIREFOX_JWT_SECRET }}
 
+      # GitHubリリース作成
       - name: Create GitHub Release
-        uses: softprops/action-gh-release@v2
+        run: |
+          gh release create ${{ github.ref_name }} \
+            .output/*.zip \
+            --title "Release ${{ github.ref_name }}" \
+            --generate-notes \
+            --notes "⚠️ Please download the \`.zip\` file below, not the \"Source code\" archives."
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      # PRを作成（バージョンが変更された場合のみ）
+      - name: Create Pull Request
+        if: steps.version.outputs.needs_bump == 'true'
+        id: create_pr
+        uses: peter-evans/create-pull-request@v7
         with:
-          tag_name: ${{ github.ref_name }}
-          generate_release_notes: true
+          branch: release/v${{ steps.version.outputs.tag_version }}
+          commit-message: "chore: bump version to ${{ steps.version.outputs.tag_version }}"
+          title: "Release v${{ steps.version.outputs.tag_version }}"
+          body: |
+            タグ **v${{ steps.version.outputs.tag_version }}** に基づく自動生成PRです。
+
+            - Current version: `${{ steps.version.outputs.current_version }}`
+            - New version: `${{ steps.version.outputs.tag_version }}`
+          base: master
+
+      # Auto-mergeを有効化してブランチを削除
+      - name: Merge pull request and delete branch
+        if: steps.version.outputs.needs_bump == 'true' && steps.create_pr.outputs.pull-request-number
+        run: gh pr merge ${{ steps.create_pr.outputs.pull-request-number }} --auto --squash --delete-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
