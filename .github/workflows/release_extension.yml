@@ -45,7 +45,7 @@ jobs:
       # ストアに提出
       - name: Submit to stores
         run: |
-          yarn wxt submit --dry-run \
+          yarn wxt submit \
             --chrome-zip .output/*-chrome.zip
         env:
           CHROME_EXTENSION_ID: ${{ secrets.CHROME_EXTENSION_ID }}
