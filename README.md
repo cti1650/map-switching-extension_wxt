@@ -1,6 +1,6 @@
 # Map Switching Extension
 
-Googleストリートビューで見ている場所を他のマップで開いて表示したい！という個人的な要望をChrome拡張機能化しました！
+Google ストリートビューで見ている場所を他のマップで開いて表示したい！という個人的な要望を Chrome 拡張機能化しました！
 
 https://chromewebstore.google.com/detail/map-switching-extension/dkpkkcfenknkfjjpbaafahfakkdlnjcl?authuser=0&hl=ja
 
@@ -34,6 +34,15 @@ yarn zip
 
 ```
 yarn e2e
+```
+
+### リリース
+
+バージョンタグをつけることでリリースできる
+
+```
+git tag v1.0.0
+git push origin v1.0.0
 ```
 
 ## 参考サイト
