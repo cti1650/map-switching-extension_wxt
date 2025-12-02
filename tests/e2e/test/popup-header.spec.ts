@@ -18,7 +18,7 @@ test("Popup Open Google Maps", async ({ page, extensionId }) => {
   const popupPage = new ExtensionPopupPage(page);
   await popupPage.goto(extensionId, `?url=${encodeURIComponent(testPageUrl)}`);
 
-  const newTab = await popupPage.openMapLink("Google Map で開く");
+  const newTab = await popupPage.openMapLink("#google-map-button");
   const googleMapPage = new GoogleMapPage(newTab);
   const resultPageUrl = await googleMapPage.getUrl();
   const searchResultText = await googleMapPage.getSearchResultText();
@@ -31,7 +31,7 @@ test("Popup Open Yahoo Map", async ({ page, extensionId }) => {
   const popupPage = new ExtensionPopupPage(page);
   await popupPage.goto(extensionId, `?url=${encodeURIComponent(testPageUrl)}`);
 
-  const newTab = await popupPage.openMapLink("Yahoo! Map で開く");
+  const newTab = await popupPage.openMapLink("#yahoo-map-button");
   const yahooMapPage = new YahooMapPage(newTab);
   const resultPageUrl = await yahooMapPage.getUrl();
   const searchResultText = await yahooMapPage.getSearchResultText();
@@ -49,7 +49,7 @@ test("Popup Open GSI Maps", async ({ page, extensionId }) => {
   const popupPage = new ExtensionPopupPage(page);
   await popupPage.goto(extensionId, `?url=${encodeURIComponent(testPageUrl)}`);
 
-  const newTab = await popupPage.openMapLink("地理院地図 で開く");
+  const newTab = await popupPage.openMapLink("#gsi-map-button");
   const gsiMapPage = new GsiMapPage(newTab);
   const resultPageUrl = await gsiMapPage.getUrl();
   const searchResultText = await gsiMapPage.getSearchResultText();
