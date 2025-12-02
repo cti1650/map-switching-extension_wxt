@@ -112,7 +112,6 @@ jobs:
   security-check:
     name: Security Scan
     runs-on: ubuntu-latest
-    if: false # TODO: 参考用に残す。後で有効化すること。
     steps:
       - name: Checkout
         uses: actions/checkout@v5

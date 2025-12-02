@@ -14,12 +14,12 @@ export const PopupPage: FC<Props> = ({ links, url }) => {
         <h1 className="text-2xl text-center font-extrabold">Map Switching Extension</h1>
         {links ? (
           <div className="grid grid-cols-3">
-            <ButtonPanel title="Google Map" src={links.gmap} />
-            <ButtonPanel title="Yahoo! Map" src={links.ymap} />
-            <ButtonPanel title="Yahoo!カーナビ" src={links.ycarnavi} />
-            <ButtonPanel title="地理院地図" src={links.gsimap} />
-            <ButtonPanel title="重ねるハザードマップ" src={links.disaportal} />
-            <ButtonPanel title="川の防災情報" src={links.kawabou} />
+            <ButtonPanel id="google-map" title="Google Map" src={links.gmap} />
+            <ButtonPanel id="yahoo-map" title="Yahoo! Map" src={links.ymap} />
+            <ButtonPanel id="yahoo-carnavi" title="Yahoo!カーナビ" src={links.ycarnavi} />
+            <ButtonPanel id="gsi-map" title="地理院地図" src={links.gsimap} />
+            <ButtonPanel id="disaportal" title="重ねるハザードマップ" src={links.disaportal} />
+            <ButtonPanel id="kawabou" title="川の防災情報" src={links.kawabou} />
           </div>
         ) : (
           <div className="w-full py-5 text-center">

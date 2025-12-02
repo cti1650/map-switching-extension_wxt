@@ -23,8 +23,8 @@ export class ExtensionPopupPage extends BasePage {
   /**
    * ボタンを押して地図リンクを開く
    */
-  async openMapLink(text = ""): Promise<Page> {
-    const button = this.page.getByText(text).first();
+  async openMapLink(selector = ""): Promise<Page> {
+    const button = this.page.locator(selector).first();
     const promiseOpenNewTab = this.page.context().waitForEvent("page");
     await button.click();
     const newTab = await promiseOpenNewTab;
