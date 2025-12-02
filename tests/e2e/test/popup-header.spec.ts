@@ -1,7 +1,9 @@
 import { expect, test } from "../fixtures";
+import { DisaportalPage } from "../pom/disaportal.page";
 import { ExtensionPopupPage } from "../pom/ext-popup.page";
 import { GoogleMapPage } from "../pom/google-map.page";
 import { GsiMapPage } from "../pom/gsi-map.page";
+import { KawabouPage } from "../pom/kawabou.page";
 import { YahooMapPage } from "../pom/yahoo-map.page";
 
 const testPageUrl =
@@ -56,4 +58,30 @@ test("Popup Open GSI Maps", async ({ page, extensionId }) => {
 
   expect(resultPageUrl).toContain("maps.gsi.go.jp");
   expect(searchResultText).toContain("35.709635,139.810203");
+});
+
+test("Popup Open 重ねるハザードマップ", async ({ page, extensionId }) => {
+  const popupPage = new ExtensionPopupPage(page);
+  await popupPage.goto(extensionId, `?url=${encodeURIComponent(testPageUrl)}`);
+
+  const newTab = await popupPage.openMapLink("#disaportal-button");
+  const disaportalPage = new DisaportalPage(newTab);
+  const resultPageUrl = await disaportalPage.getUrl();
+  const searchResultText = await disaportalPage.getSearchResultText();
+
+  expect(resultPageUrl).toContain("disaportal.gsi.go.jp/hazardmap");
+  expect(searchResultText).toContain("35.709636,139.810204");
+});
+
+test("Popup Open 川の防災情報", async ({ page, extensionId }) => {
+  const popupPage = new ExtensionPopupPage(page);
+  await popupPage.goto(extensionId, `?url=${encodeURIComponent(testPageUrl)}`);
+
+  const newTab = await popupPage.openMapLink("#kawabou-button");
+  const kawabouPage = new KawabouPage(newTab);
+  const resultPageUrl = await kawabouPage.getUrl();
+  const searchResultText = await kawabouPage.getSearchResultText();
+
+  expect(resultPageUrl).toContain("river.go.jp/kawabou");
+  expect(searchResultText).toContain("東京都墨田区");
 });
