@@ -32,31 +32,35 @@ type ButtonPanelProps = {
 };
 
 export const ButtonPanel: FC<ButtonPanelProps> = (props) => {
-  const { src = "", title = "button", children } = props;
+  const { src = "", title = "button" } = props;
   const handleClick = useCallback(() => {
     window.open(src);
   }, [src]);
   return (
-    <div className="w-full flex flex-col p-2">
-      <h2 className="text-lg text-center font-extrabold">{title}</h2>
+    <div className="w-full flex flex-col justify-between p-2">
       <div>
-        <div className="h-auto w-full max-w-lg mx-auto my-0 p-2">
-          <QRCode
-            size={256}
-            style={{ height: "auto", maxWidth: "100%", width: "100%" }}
-            className="w-full h-auto max-w-full"
-            value={src}
-            viewBox={"0 0 256 256"}
-          />
-        </div>
+        <h2 className="text-lg text-center font-extrabold">{title}</h2>
       </div>
-      <button
-        type="button"
-        className="w-full py-1 text-xs border border-gray-400 bg-gray-300 rounded-lg shadow"
-        onClick={handleClick}
-      >
-        {children || title} で開く
-      </button>
+      <div>
+        <div>
+          <div className="h-auto w-full max-w-128 mx-auto my-0 p-2">
+            <QRCode
+              size={256}
+              style={{ height: "auto", maxWidth: "100%", width: "100%" }}
+              className="w-full h-auto max-w-full"
+              value={src}
+              viewBox={`0 0 256 256`}
+            />
+          </div>
+        </div>
+        <button
+          type="button"
+          className="w-full py-1 text-xs border border-gray-400 bg-gray-300 rounded-lg shadow"
+          onClick={handleClick}
+        >
+          開く
+        </button>
+      </div>
     </div>
   );
 };
