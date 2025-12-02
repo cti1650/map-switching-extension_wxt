@@ -49,3 +49,4 @@ git push origin v1.0.0
 
 - [Next-gen Web Extension Framework – WXT](https://wxt.dev/)
 - [Install Tailwind CSS with Vite - Tailwind CSS](https://tailwindcss.com/docs/guides/vite)
+- [caseycesari/GeoJSON.js: Turn your geo data into GeoJSON. For Node.js and the browser.](https://github.com/caseycesari/geojson.js)
