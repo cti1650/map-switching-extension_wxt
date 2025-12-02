@@ -8,7 +8,7 @@ type Props = {
 
 export const PopupLayout: FC<Props> = ({ children, center = true }) => {
   return (
-    <div className="w-[400px] min-h-[130px] py-4">
+    <div className="w-[500px] min-h-[130px] py-4">
       <div
         className={cc([
           "h-full flex flex-col gap-2 p-4",
